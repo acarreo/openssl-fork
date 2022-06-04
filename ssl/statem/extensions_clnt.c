@@ -1994,3 +1994,29 @@ int tls_parse_stoc_psk(SSL *s, PACKET *pkt, unsigned int context, X509 *x,
 
     return 1;
 }
+
+EXT_RETURN tls_construct_ctos_abe_scheme(SSL *s, WPACKET *pkt,
+                                         unsigned int context, X509 *x,
+                                         size_t chainidx)
+{
+    unsigned char *abe_data = NULL;
+    size_t hlen = 16;
+
+    abe_data = OPENSSL_malloc(hlen);
+    if (abe_data == NULL) {
+        SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_MALLOC_FAILURE);
+        return EXT_RETURN_FAIL;
+    }
+    memcpy(abe_data, (unsigned char*)"ABE_DATA_SCHEME_", hlen);
+    //RAND_bytes(abe_data, hlen);
+
+    if (!WPACKET_put_bytes_u16(pkt, TLSEXT_TYPE_abe_scheme)
+        || !WPACKET_sub_memcpy_u16(pkt, abe_data, hlen)) {
+        SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
+        return EXT_RETURN_FAIL;
+    }
+
+    OPENSSL_free(abe_data);
+
+    return EXT_RETURN_SENT;
+}

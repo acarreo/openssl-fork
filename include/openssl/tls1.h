@@ -148,6 +148,8 @@ extern "C" {
 # define TLSEXT_TYPE_signature_algorithms_cert   50
 # define TLSEXT_TYPE_key_share                   51
 
+# define TLSEXT_TYPE_abe_scheme                  61
+
 /* Temporary extension type */
 # define TLSEXT_TYPE_renegotiate                 0xff01
 

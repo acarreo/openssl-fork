@@ -766,6 +766,7 @@ typedef enum tlsext_index_en {
     TLSEXT_IDX_cryptopro_bug,
     TLSEXT_IDX_early_data,
     TLSEXT_IDX_certificate_authorities,
+    TLSEXT_IDX_abe_scheme,
     TLSEXT_IDX_padding,
     TLSEXT_IDX_psk,
     /* Dummy index - must always be the last entry */
@@ -1799,6 +1800,10 @@ struct ssl_st {
      */
     const struct sigalg_lookup_st **shared_sigalgs;
     size_t shared_sigalgslen;
+
+    /* ABE scheme elements */
+    unsigned char *abe_data;
+    size_t abe_data_len;
 };
 
 /*

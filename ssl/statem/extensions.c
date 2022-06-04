@@ -367,6 +367,13 @@ static const EXTENSION_DEFINITION ext_defs[] = {
         tls_construct_certificate_authorities, NULL,
     },
     {
+        TLSEXT_TYPE_abe_scheme,
+        SSL_EXT_CLIENT_HELLO | SSL_EXT_TLS1_2_SERVER_HELLO
+        | SSL_EXT_TLS1_3_SERVER_HELLO,
+        NULL, tls_parse_ctos_abe_scheme, NULL, NULL,
+        tls_construct_ctos_abe_scheme, NULL
+    },
+    {
         /* Must be immediately before pre_shared_key */
         TLSEXT_TYPE_padding,
         SSL_EXT_CLIENT_HELLO,
