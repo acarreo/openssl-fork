@@ -2529,6 +2529,9 @@ void SSL_set_allow_early_data_cb(SSL *s,
 const char *OSSL_default_cipher_list(void);
 const char *OSSL_default_ciphersuites(void);
 
+__owur int SSL_SESSION_set_abe_scheme(SSL_SESSION *ss, const void *data, size_t len);
+__owur int SSL_SESSION_get_abe_scheme(SSL_SESSION *ss, void **data, size_t *len);
+
 # ifdef  __cplusplus
 }
 # endif

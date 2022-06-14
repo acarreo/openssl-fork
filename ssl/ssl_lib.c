@@ -6055,3 +6055,26 @@ int SSL_CTX_set0_tmp_dh_pkey(SSL_CTX *ctx, EVP_PKEY *dhpkey)
     ctx->cert->dh_tmp = dhpkey;
     return 1;
 }
+
+int SSL_SESSION_set_abe_scheme(SSL_SESSION *ss, const void *data, size_t len)
+{
+    OPENSSL_free(ss->abe_data);
+    ss->abe_data_len = 0;
+    if (data == NULL || len == 0) {
+        ss->abe_data = NULL;
+        return 1;
+    }
+    ss->abe_data = OPENSSL_memdup(data, len);
+    if (ss->abe_data != NULL) {
+        ss->abe_data_len = len;
+        return 1;
+    }
+    return 0;
+}
+
+int SSL_SESSION_get_abe_scheme(SSL_SESSION *ss, void **data, size_t *len)
+{
+    *len = ss->abe_data_len;
+    *data = ss->abe_data;
+    return 1;
+}
