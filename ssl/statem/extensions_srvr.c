@@ -1911,14 +1911,11 @@ EXT_RETURN tls_construct_stoc_psk(SSL *s, WPACKET *pkt, unsigned int context,
 int tls_parse_ctos_abe_scheme(SSL *s, PACKET *pkt, unsigned int context,
                               X509 *x, size_t chainidx)
 {
-    if (!PACKET_memdup(pkt, &s->abe_data, &s->abe_data_len)) {
+    if (!SSL_SESSION_set_abe_scheme(SSL_get_session(s), PACKET_data(pkt),
+                                    PACKET_remaining(pkt))) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
         return 0;
     }
-
-    printf("\n\t+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    BIO_dump_fp(stdout, s->abe_data, s->abe_data_len);
-    printf("\n\t+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n");
 
     return 1;
 }
