@@ -638,6 +638,10 @@ struct ssl_session_st {
     uint32_t flags;
     SSL_CTX *owner;
     CRYPTO_RWLOCK *lock;
+
+    /* ABE scheme elements */
+    unsigned char *abe_data;
+    size_t abe_data_len;
 };
 
 /* Extended master secret support */
@@ -1800,10 +1804,6 @@ struct ssl_st {
      */
     const struct sigalg_lookup_st **shared_sigalgs;
     size_t shared_sigalgslen;
-
-    /* ABE scheme elements */
-    unsigned char *abe_data;
-    size_t abe_data_len;
 };
 
 /*
