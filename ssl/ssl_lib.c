@@ -25,6 +25,8 @@
 #include "internal/refcount.h"
 #include "internal/ktls.h"
 
+# include "openssl/content_filtering_ext.h" /* for Content Filtering extension */
+
 static int ssl_undefined_function_1(SSL *ssl, SSL3_RECORD *r, size_t s, int t,
                                     SSL_MAC_BUF *mac, size_t macsize)
 {
@@ -6077,4 +6079,61 @@ int SSL_SESSION_get_abe_scheme(SSL_SESSION *ss, void **data, size_t *len)
     *len = ss->abe_data_len;
     *data = ss->abe_data;
     return 1;
+}
+
+/* Create and initialize a new content filtering extension */
+CONTENT_FILTERING_EXTENSION *create_content_filtering_ext(const char* schema_name,
+                                                          const char* ec_name,
+                                                          const unsigned char *params,
+                                                          uint16_t params_length)
+{
+    CONTENT_FILTERING_EXTENSION *ext;
+
+    ext = (CONTENT_FILTERING_EXTENSION *)OPENSSL_malloc(sizeof(CONTENT_FILTERING_EXTENSION));
+    if (ext == NULL) {
+        return NULL; /* Memory allocation failure */
+    }
+
+    ext->params = (unsigned char *)OPENSSL_malloc(params_length);
+    if (ext->params == NULL) {
+        OPENSSL_free(ext);
+        return NULL;
+    }
+
+    strcpy(ext->schema_name, schema_name);
+    strcpy(ext->elliptic_curve_name, ec_name);
+    memcpy(ext->params, params, params_length);
+    ext->params_length = params_length;
+
+    return ext;
+}
+
+/* Sets the content_filtering extension for an SSL_SESSION */
+int SSL_SESSION_set_content_filtering_ext(SSL_SESSION *session, CONTENT_FILTERING_EXTENSION *ext)
+{
+    if (session == NULL || ext == NULL) {
+        return 0;
+    }
+
+    session->content_filtering_ext = ext;
+    return 1;
+}
+
+/* Get content filtering extension from SSL_SESSION (read-only access) */
+const CONTENT_FILTERING_EXTENSION *SSL_SESSION_get_content_filtering_ext(const SSL_SESSION *session)
+{
+    return (session == NULL) ? NULL : session->content_filtering_ext;
+}
+
+/* Frees the content_filtering extension */
+void free_content_filtering_ext(CONTENT_FILTERING_EXTENSION *content_filtering_ext)
+{
+    if (content_filtering_ext == NULL) {
+        return;
+    }
+
+    /* Free the memory allocated for the content filtering extension structure */
+    OPENSSL_free(content_filtering_ext->params);
+    OPENSSL_free(content_filtering_ext);
+    content_filtering_ext = NULL;
 }

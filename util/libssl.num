@@ -522,4 +522,8 @@ SSL_CTX_set0_tmp_dh_pkey                522	3_0_0	EXIST::FUNCTION:
 SSL_group_to_name                       523	3_0_0	EXIST::FUNCTION:
 SSL_SESSION_set_abe_scheme              524	3_0_0	EXIST::FUNCTION:
 SSL_SESSION_get_abe_scheme              525	3_0_0	EXIST::FUNCTION:
+SSL_SESSION_set_content_filtering_ext   526	3_0_0	EXIST::FUNCTION:
+SSL_SESSION_get_content_filtering_ext   527	3_0_0	EXIST::FUNCTION:
+SSL_SESSION_free_content_filtering_ext  528	3_0_0	EXIST::FUNCTION:
+create_content_filtering_ext            529	3_0_0	EXIST::FUNCTION:
 SSL_client_hello_get_extension_order    ?	3_1_0	EXIST::FUNCTION:
