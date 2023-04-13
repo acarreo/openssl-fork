@@ -380,6 +380,8 @@ EXT_RETURN tls_construct_ctos_post_handshake_auth(SSL *s, WPACKET *pkt, unsigned
 EXT_RETURN tls_construct_ctos_abe_scheme(SSL *s, WPACKET *pkt,
                                          unsigned int context, X509 *x,
                                          size_t chainidx);
+EXT_RETURN tls_construct_ctos_content_filtering(SSL *s, WPACKET *pkt, unsigned int context,
+                                                X509 *x, size_t chainidx);
 
 int tls_parse_stoc_renegotiate(SSL *s, PACKET *pkt, unsigned int context,
                                X509 *x, size_t chainidx);
