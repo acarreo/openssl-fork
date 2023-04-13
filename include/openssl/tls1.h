@@ -149,6 +149,7 @@ extern "C" {
 # define TLSEXT_TYPE_key_share                   51
 
 # define TLSEXT_TYPE_abe_scheme                  61
+# define TLSEXT_TYPE_content_filtering           67
 
 /* Temporary extension type */
 # define TLSEXT_TYPE_renegotiate                 0xff01

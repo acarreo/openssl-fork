@@ -771,6 +771,7 @@ typedef enum tlsext_index_en {
     TLSEXT_IDX_early_data,
     TLSEXT_IDX_certificate_authorities,
     TLSEXT_IDX_abe_scheme,
+    TLSEXT_IDX_content_filtering,
     TLSEXT_IDX_padding,
     TLSEXT_IDX_psk,
     /* Dummy index - must always be the last entry */
