@@ -374,6 +374,17 @@ static const EXTENSION_DEFINITION ext_defs[] = {
         tls_construct_ctos_abe_scheme, NULL
     },
     {
+        TLSEXT_TYPE_content_filtering,
+        SSL_EXT_CLIENT_HELLO | SSL_EXT_TLS1_2_SERVER_HELLO
+        | SSL_EXT_TLS1_3_SERVER_HELLO,
+        NULL,
+        tls_parse_ctos_content_filtering,
+        NULL, /* No parsing on the client side. */
+        NULL, /* No construction on the server side */
+        tls_construct_ctos_content_filtering,
+        NULL
+    },
+    {
         /* Must be immediately before pre_shared_key */
         TLSEXT_TYPE_padding,
         SSL_EXT_CLIENT_HELLO,
