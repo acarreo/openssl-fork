@@ -36,6 +36,8 @@
 # include "internal/bio.h"
 # include "internal/ktls.h"
 
+# include "openssl/content_filtering_ext.h" /* for Content Filtering extension */
+
 # ifdef OPENSSL_BUILD_SHLIBSSL
 #  undef OPENSSL_EXTERN
 #  define OPENSSL_EXTERN OPENSSL_EXPORT
@@ -642,6 +644,11 @@ struct ssl_session_st {
     /* ABE scheme elements */
     unsigned char *abe_data;
     size_t abe_data_len;
+
+    /* The content_filtering_ext field stores the configuration for the custom
+     * "content_filtering" extension. This extension allows the client to send
+     * additional data readable by (a gateway and) the server. */
+    CONTENT_FILTERING_EXTENSION *content_filtering_ext;
 };
 
 /* Extended master secret support */
