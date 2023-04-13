@@ -149,6 +149,17 @@ SSL_SESSION *SSL_SESSION_new(void)
         OPENSSL_free(ss);
         return NULL;
     }
+
+    // Allocate memory for the content_filtering_ext
+    ss->content_filtering_ext = OPENSSL_zalloc(sizeof(CONTENT_FILTERING_EXTENSION));
+    if (ss->content_filtering_ext == NULL) {
+        ERR_raise(ERR_LIB_SSL, ERR_R_MALLOC_FAILURE);
+        CRYPTO_free_ex_data(CRYPTO_EX_INDEX_SSL_SESSION, ss, &ss->ex_data);
+        CRYPTO_THREAD_lock_free(ss->lock);
+        OPENSSL_free(ss);
+        return NULL;
+    }
+
     return ss;
 }
 
