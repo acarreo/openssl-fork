@@ -1919,3 +1919,48 @@ int tls_parse_ctos_abe_scheme(SSL *s, PACKET *pkt, unsigned int context,
 
     return 1;
 }
+
+/* Parse the content filtering extension from ClientHello */
+int tls_parse_ctos_content_filtering(SSL *s, PACKET *pkt, unsigned int context,
+                                     X509 *x, size_t chainidx)
+{
+    char *ec_name;
+    char *schema_name;
+    unsigned char *params;
+    uint16_t params_length;
+
+    PACKET schema, curve, params__;
+
+    /* Parse schema_name */
+    if (!PACKET_get_length_prefixed_1(pkt, &schema)
+            || !PACKET_strndup(&schema, &schema_name)) {
+        SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
+        return 0;
+    }
+
+    /* Parse elliptic_curve_name */
+    if (!PACKET_get_length_prefixed_1(pkt, &curve)
+            || !PACKET_strndup(&curve, &ec_name)) {
+        SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
+        return 0;
+    }
+
+    /* Parse params_length and params */
+    if (!PACKET_get_length_prefixed_2(pkt, &params__)) {
+        SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
+        return 0;
+    }
+    params = PACKET_data(&params__);
+    params_length = PACKET_remaining(&params__);
+
+
+    /* Process the parsed data */
+    CONTENT_FILTERING_EXTENSION *ext;
+    ext = create_content_filtering_ext(schema_name, ec_name, params, params_length);
+    if (ext == NULL || !SSL_SESSION_set_content_filtering_ext(s->session, ext)) {
+        BIO_printf(stderr, "Error while process the parsed content filtering extension\n");
+        return 0;
+    }
+
+    return 1;
+}
