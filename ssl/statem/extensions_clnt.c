@@ -2030,13 +2030,6 @@ EXT_RETURN tls_construct_ctos_content_filtering(SSL *s, WPACKET *pkt,
     // const CONTENT_FILTERING_EXTENSION *ext;
     // ext = SSL_SESSION_get_content_filtering_ext(s->session);
 
-    // if (s->session == NULL) {
-    //     BIO_printf(stdout, "----------------------------------------------------------\n");
-    // }
-    // else{
-    //     BIO_printf(stdout, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    // }
-
     CONTENT_FILTERING_EXTENSION *ext;
     ext = create_content_filtering_ext("kp-abe-based-dpvs", "bls12-381",
                                        (unsigned char *)"\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 16);
