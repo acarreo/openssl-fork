@@ -1,0 +1,48 @@
+# Server authentication
+recipient = "/C=FI/O=Insta Demo/CN=Insta Demo CA" # or set srvcert or issuer
+ignore_keyusage = 1 # potentially needed quirk
+unprotected_errors = 1 # potentially needed quirk
+extracertsout = insta.extracerts.pem
+
+# Client authentication
+ref = 3078 # user identification
+secret = pass:insta # can be used for both client and server side
+
+# Generic message options
+cmd = ir # default operation, can be overridden on cmd line with, e.g., kur
+
+# Certificate enrollment
+subject = "/CN=openssl-cmp-test"
+newkey = insta.priv.pem
+out_trusted = insta.ca.crt
+certout = insta.cert.pem
+
+[pbm] # Password-based protection for Insta CA
+# Server and client authentication
+ref = $insta::ref # 3078
+secret = $insta::secret # pass:insta
+
+[signature] # Signature-based protection for Insta CA
+# Server authentication
+trusted = insta.ca.crt # does not include keyUsage digitalSignature
+
+# Client authentication
+secret = # disable PBM
+key = $insta::newkey # insta.priv.pem
+cert = $insta::certout # insta.cert.pem
+
+[ir]
+cmd = ir
+
+[cr]
+cmd = cr
+
+[kur]
+# Certificate update
+cmd = kur
+oldcert = $insta::certout # insta.cert.pem
+
+[rr]
+# Certificate revocation
+cmd = rr
+oldcert = $insta::certout # insta.cert.pem
